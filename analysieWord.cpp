@@ -43,11 +43,31 @@ void scan(string str){
                     break;
                 }
             }
-        } else if(IsDigit(str[idx])){    
-            num = 0;
-            while(IsDigit(str[idx])){
-                num = num*10 + str[idx] - '0';
+        } else if(IsDigit(str[idx])){
+            otcflag = 0, hexflag = 0;
+            // 判断进制
+            if(str[idx]=='0'&&str[idx+1]!=' '){
                 idx++;
+                if(str[idx]=='x'||str[idx]=='X'){
+                    // 十六进制
+                    hexflag = 1;
+                    idx++;
+                }
+                otcflag = 1;
+            }
+            // 十六进制
+            if(hexflag){
+                while(IsDigit(str[idx])||IsLetter(str[idx])){
+                    strToken+=str[idx];
+                    idx++;
+                }
+            } else {
+                // 十进制    
+                num = 0;
+                while(IsDigit(str[idx])){
+                    num = num*10 + str[idx] - '0';
+                    idx++;
+                }
             }
             sign = 1 + otcflag + hexflag;
         } else {
@@ -65,7 +85,7 @@ void scan(string str){
 }
 
 int main(){
-    string s = "0x34";
+    string s = """if data+92>0x3f then  data=data+01;else data=data-01;"""; // 测试数据
     int length = getLength(s);
     while(idx < length){
         scan(s);
@@ -73,11 +93,11 @@ int main(){
             case -1: // 空格退出
                 break;
             case 0: // 标识符
+            case 3: // 数字——十六进制
                 cout<<"<"<<sign<<","<<strToken<<">"<<endl;
                 break;
             case 1: // 数字——十进制
             case 2: // 数字——八进制
-            case 3: // 数字——十六进制
                 cout<<"<"<<sign<<","<<num<<">"<<endl;
                 break;
             case 4:
