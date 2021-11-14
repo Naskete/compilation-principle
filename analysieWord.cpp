@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 using namespace std;
 
@@ -25,6 +26,15 @@ int getLength(string str){
     return str.length();
 }
 
+string readfile(string filename, string str){
+    ifstream file;
+    file.open(filename, ios::in);
+    string buf;
+    while(getline(file, buf)){
+        str+=buf;
+    }
+    return str;
+}
 void scan(string str){
     if(str[idx]==' '){
         sign = -1;
@@ -94,7 +104,9 @@ void scan(string str){
 }
 
 int main(){
-    string s = "if data+92>0x3f then data=data+01 else data=data-01+0;"; // 测试数据
+    // string s = "if data+92>0x3f then data=data+01 else data=data-01+0;"; // 测试数据
+    string s;
+    s= readfile("data.txt", s);
     int length = getLength(s);
     while(idx < length){
         scan(s);
