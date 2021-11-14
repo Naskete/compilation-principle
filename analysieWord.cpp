@@ -93,7 +93,7 @@ void scan(string str){
 }
 
 int main(){
-    string s = """data1 = 3"""; // 测试数据
+    string s = "3 >= 3 "; // 测试数据
     int length = getLength(s);
     while(idx < length){
         scan(s);
