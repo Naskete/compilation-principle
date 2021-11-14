@@ -46,16 +46,17 @@ void scan(string str){
         } else if(IsDigit(str[idx])){
             otcflag = 0, hexflag = 0;
             // 判断进制
-            if(str[idx]=='0'&&str[idx+1]!=' '&&(idx+1<getLength(str))){
+            if(str[idx]=='0'&&(idx+1<getLength(str))&&str[idx+1]!=' '){
                 idx++;
                 if(str[idx]=='x'||str[idx]=='X'){
                     // 十六进制
                     hexflag = 1;
                     idx++;
                 }
-                if(IsDigit(str[idx+1]))
-                    otcflag = 1;
+                otcflag = 1;
             }
+            if(!IsDigit(str[idx]))
+                otcflag = 0;
             // 十六进制
             if(hexflag){
                 while(IsDigit(str[idx])||IsLetter(str[idx])){
@@ -93,7 +94,7 @@ void scan(string str){
 }
 
 int main(){
-    string s = "3 >= 3 "; // 测试数据
+    string s = "if data+92>0x3f then data=data+01 else data=data-01+0;"; // 测试数据
     int length = getLength(s);
     while(idx < length){
         scan(s);
