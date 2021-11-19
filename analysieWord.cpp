@@ -11,8 +11,8 @@ int idx = 0;
 int num = 0;
 string strToken = "";
 
-string keyword[5] = {"if", "then", "else", "while", "do"};
-char signal[10] = {'+', '-', '*', '/', '>', '<', '=','(', ')', ';'};
+string keywords[5] = {"if", "then", "else", "while", "do"};
+char SIGNAL[10] = {'+', '-', '*', '/', '>', '<', '=','(', ')', ';'};
 
 bool IsLetter(char ch){
     return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
@@ -29,26 +29,31 @@ int getLength(string str){
 string readfile(string filename, string str){
     ifstream file;
     file.open(filename, ios::in);
+    if(!file.is_open()){
+        cout<<"failed to read file"<<endl;
+        return NULL;
+    }
     string buf;
     while(getline(file, buf)){
         str+=buf;
     }
     return str;
 }
+
 void scan(string str){
     if(str[idx]==' '){
         sign = -1;
         idx++;
     } else {
         strToken = "";
-        if(IsLetter(str[idx])){
-            while(IsLetter(str[idx])){
+        if(IsLetter(str[idx])||str[idx]=='_'){
+            while(IsLetter(str[idx])||str[idx]=='_'||IsDigit(str[idx])){
                 strToken+=str[idx];
                 idx++;
             }
             sign = 0;
             for(int i = 0; i < 5; i++){
-                if(strToken==keyword[i]){
+                if(strToken==keywords[i]){
                     sign = 4;
                     break;
                 }
@@ -65,6 +70,7 @@ void scan(string str){
                 }
                 otcflag = 1;
             }
+
             if(!IsDigit(str[idx]))
                 otcflag = 0;
             // 十六进制
@@ -85,7 +91,7 @@ void scan(string str){
         } else {
             // 界符
             for(int i = 0; i < 10; i++){
-                if(str[idx]==signal[i]){
+                if(str[idx]==SIGNAL[i]){
                     strToken+=str[idx];
                     // 判断 += -= *= /= == >= <=
                     if(i < 7){
@@ -106,7 +112,7 @@ void scan(string str){
 int main(){
     // string s = "if data+92>0x3f then data=data+01 else data=data-01+0;"; // 测试数据
     string s;
-    s= readfile("data.txt", s);
+    s= readfile("program.txt", s);
     int length = getLength(s);
     while(idx < length){
         scan(s);
